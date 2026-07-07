@@ -1,6 +1,6 @@
 # KOS-20 — Základní kostra: layout + audio init + kick
 
-**Status:** Todo
+**Status:** Done (v1.0, PR #1)
 
 ## Popis
 

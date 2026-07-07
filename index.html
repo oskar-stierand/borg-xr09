@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BORG XR-09 — Rhythm Composer</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+
+  body {
+    background: #26262a;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    padding: 24px;
+  }
+
+  /* ===== ŠASI ===== */
+  #machine {
+    width: 980px;
+    background: linear-gradient(175deg, #dcd9d0 0%, #cdcac0 55%, #c2bfb4 100%);
+    border: 1px solid #706c60;
+    border-radius: 8px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.5);
+    overflow: hidden;
+  }
+
+  /* ===== HORNÍ BRANDING ===== */
+  #header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    background: #17171a;
+    padding: 14px 22px 12px;
+    border-bottom: 3px solid #ff6a00;
+  }
+  #header .brand {
+    color: #ece8dc;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 3px;
+  }
+  #header .brand span { color: #ff6a00; }
+  #header .brand-sub {
+    color: #a5a29a;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  /* ===== PANEL S MODULY ===== */
+  #panel {
+    display: flex;
+    gap: 14px;
+    padding: 18px 20px 14px;
+  }
+  .module {
+    background: rgba(255,255,255,.22);
+    border: 1px solid #8f8b7f;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .module.grow { flex: 1; }
+  .module-label {
+    background: #1c1c1f;
+    color: #ded9cb;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 4px 10px;
+  }
+  .module-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 14px 16px;
+  }
+
+  /* ===== KNOBY ===== */
+  .knob-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .knob {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 28%, #454549, #202023 60%, #101012);
+    border: 1px solid #000;
+    box-shadow: 0 3px 6px rgba(0,0,0,.45), inset 0 1px 1px rgba(255,255,255,.18);
+    position: relative;
+    cursor: ns-resize;
+    touch-action: none;
+  }
+  .knob::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 4px;
+    width: 3px;
+    height: 15px;
+    margin-left: -1.5px;
+    background: #ece8dc;
+    border-radius: 2px;
+  }
+  .knob-unit label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #35332c;
+    text-transform: uppercase;
+  }
+
+  /* ===== TRANSPORT ===== */
+  .transport { flex-direction: column; gap: 10px; }
+  .tbtn {
+    width: 96px;
+    padding: 9px 0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #26241f;
+    background: linear-gradient(#f1eee5, #d8d5ca);
+    border: 1px solid #7d7a6e;
+    border-radius: 3px;
+    box-shadow: 0 2px 3px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.7);
+    cursor: pointer;
+  }
+  .tbtn:active { transform: translateY(1px); box-shadow: 0 1px 1px rgba(0,0,0,.3); }
+  .led-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #4a1410;
+    border: 1px solid #2a0c08;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.5);
+  }
+  .led-dot.on { background: #ff2e18; box-shadow: 0 0 10px rgba(255,46,24,.9); }
+
+  /* ===== TEMPO DISPLEJ ===== */
+  #tempo-display {
+    background: #120c0a;
+    color: #ff4a26;
+    font-family: "Courier New", monospace;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    padding: 6px 12px;
+    border-radius: 3px;
+    border: 1px solid #000;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,.8);
+    text-shadow: 0 0 8px rgba(255,74,38,.7);
+    min-width: 84px;
+    text-align: center;
+  }
+
+  /* ===== TRIG PAD ===== */
+  #kick-trig {
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
+    background: linear-gradient(#efece2, #d6d3c8);
+    border: 1px solid #7d7a6e;
+    box-shadow: 0 3px 4px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.7);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #26241f;
+    cursor: pointer;
+  }
+  #kick-trig:active, #kick-trig.hit { background: #ffb17a; transform: translateY(1px); }
+
+  /* ===== STEP ŘADA ===== */
+  #steprow {
+    background: #1c1c1f;
+    padding: 16px 20px 18px;
+    border-top: 1px solid #8f8b7f;
+  }
+  #steprow .row-label {
+    color: #9c988c;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  #steps {
+    display: grid;
+    grid-template-columns: repeat(16, 1fr);
+    gap: 8px;
+  }
+  .step {
+    height: 66px;
+    border-radius: 3px;
+    background: linear-gradient(#ecead9, #d4d1c4);
+    border: 1px solid #55534a;
+    box-shadow: 0 2px 3px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.6);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 5px 5px 4px;
+    gap: 4px;
+  }
+  .step:active { transform: translateY(1px); }
+  .step .led {
+    height: 7px;
+    border-radius: 2px;
+    background: #4a1410;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.6);
+  }
+  .step.active .led { background: #ff2e18; box-shadow: 0 0 8px rgba(255,46,24,.9); }
+  .step .tag { height: 8px; border-radius: 2px; background: var(--g); opacity: .9; }
+  .step .num {
+    margin-top: auto;
+    text-align: center;
+    font-size: 9px;
+    font-weight: 700;
+    color: #57544a;
+  }
+
+  #footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 20px 10px;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #6d6a5f;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div id="machine">
+  <div id="header">
+    <div class="brand">BORG <span>XR-09</span></div>
+    <div class="brand-sub">Rhythm Composer &middot; Computer Controlled</div>
+  </div>
+
+  <div id="panel">
+    <section class="module">
+      <div class="module-label">Transport</div>
+      <div class="module-body transport">
+        <button id="btn-start" class="tbtn">START</button>
+        <button id="btn-stop" class="tbtn">STOP</button>
+        <span id="run-led" class="led-dot"></span>
+      </div>
+    </section>
+
+    <section class="module">
+      <div class="module-label">Tempo</div>
+      <div class="module-body">
+        <div id="tempo-display">120</div>
+        <div class="knob-unit">
+          <div class="knob" data-param="tempo"></div>
+          <label>BPM</label>
+        </div>
+      </div>
+    </section>
+
+    <section class="module">
+      <div class="module-label">Master</div>
+      <div class="module-body">
+        <div class="knob-unit">
+          <div class="knob" data-param="masterVol"></div>
+          <label>Volume</label>
+        </div>
+      </div>
+    </section>
+
+    <section class="module grow">
+      <div class="module-label">Bass Drum</div>
+      <div class="module-body">
+        <div class="knob-unit">
+          <div class="knob" data-param="kickTune"></div>
+          <label>Tune</label>
+        </div>
+        <div class="knob-unit">
+          <div class="knob" data-param="kickDecay"></div>
+          <label>Decay</label>
+        </div>
+        <div class="knob-unit">
+          <div class="knob" data-param="kickLevel"></div>
+          <label>Level</label>
+        </div>
+        <button id="kick-trig">TRIG</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="steprow">
+    <div class="row-label">Bass Drum &mdash; 16 Steps</div>
+    <div id="steps"></div>
+  </div>
+
+  <div id="footer">
+    <span>Borg Corporation</span>
+    <span>Model XR-09 &middot; Made with Web Audio</span>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ============================================================
+// CONSTANTS & STATE
+// ============================================================
+
+const S = {
+  playing: false,
+  tempo: 120,             // BPM (40–240) — sequencer přijde v KOS-21
+  currentStep: 0,
+  pattern: {
+    kick: new Array(16).fill(false),
+  },
+  params: {
+    masterVol: 0.8,       // vše normalizované 0–1
+    kickTune: 0.4,
+    kickDecay: 0.5,
+    kickLevel: 0.85,
+  },
+};
+
+// ============================================================
+// AUDIO ENGINE
+// ============================================================
+
+const A = { ctx: null, master: null, noiseBuf: null };
+
+function initAudio() {
+  if (A.ctx) {
+    if (A.ctx.state === 'suspended') A.ctx.resume();
+    return;
+  }
+  A.ctx = new (window.AudioContext || window.webkitAudioContext)();
+  A.master = A.ctx.createGain();
+  A.master.gain.value = S.params.masterVol;
+  A.master.connect(A.ctx.destination);
+  A.noiseBuf = buildNoiseBuffer();
+}
+
+function buildNoiseBuffer() {
+  const len = A.ctx.sampleRate;   // 1 s bílého šumu, sdílený všemi hlasy
+  const buf = A.ctx.createBuffer(1, len, A.ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+  return buf;
+}
+
+// Kick po vzoru 909: sinus s pitch envelope + krátký click transient
+function playKick(time, vel = 1) {
+  const t = time !== undefined ? time : A.ctx.currentTime;
+  const p = S.params;
+  const f0 = 40 + p.kickTune * 60;          // základní ladění 40–100 Hz
+  const dur = 0.08 + p.kickDecay * 1.1;     // délka doznění 0.08–1.18 s
+  const amp = Math.max(0.001, p.kickLevel * vel);
+
+  const osc = A.ctx.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(f0 * 3.5, t);
+  osc.frequency.exponentialRampToValueAtTime(f0, t + 0.055);
+  const vca = A.ctx.createGain();
+  vca.gain.setValueAtTime(amp, t);
+  vca.gain.exponentialRampToValueAtTime(0.001, t + dur);
+  osc.connect(vca);
+  vca.connect(A.master);
+  osc.start(t);
+  osc.stop(t + dur + 0.05);
+
+  const click = A.ctx.createBufferSource();
+  click.buffer = A.noiseBuf;
+  const bp = A.ctx.createBiquadFilter();
+  bp.type = 'bandpass';
+  bp.frequency.value = 1100;
+  bp.Q.value = 1.2;
+  const cg = A.ctx.createGain();
+  cg.gain.setValueAtTime(amp * 0.6, t);
+  cg.gain.exponentialRampToValueAtTime(0.001, t + 0.02);
+  click.connect(bp);
+  bp.connect(cg);
+  cg.connect(A.master);
+  click.start(t);
+  click.stop(t + 0.03);
+}
+
+// ============================================================
+// UI — KNOBS
+// ============================================================
+
+const KNOB_DEFS = {
+  tempo: {
+    get: () => (S.tempo - 40) / 200,
+    set: v => { S.tempo = Math.round(40 + v * 200); updateTempoDisplay(); },
+  },
+  masterVol: {
+    get: () => S.params.masterVol,
+    set: v => { S.params.masterVol = v; if (A.master) A.master.gain.value = v; },
+  },
+  kickTune:  { get: () => S.params.kickTune,  set: v => S.params.kickTune = v },
+  kickDecay: { get: () => S.params.kickDecay, set: v => S.params.kickDecay = v },
+  kickLevel: { get: () => S.params.kickLevel, set: v => S.params.kickLevel = v },
+};
+
+function initKnobs() {
+  document.querySelectorAll('.knob').forEach(el => {
+    const def = KNOB_DEFS[el.dataset.param];
+    const paint = () => { el.style.transform = 'rotate(' + (-135 + def.get() * 270) + 'deg)'; };
+    paint();
+    el.addEventListener('pointerdown', e => {
+      initAudio();
+      e.preventDefault();
+      el.setPointerCapture(e.pointerId);
+      let lastY = e.clientY;
+      const move = ev => {
+        const dv = (lastY - ev.clientY) * 0.005;
+        lastY = ev.clientY;
+        def.set(Math.min(1, Math.max(0, def.get() + dv)));
+        paint();
+      };
+      const up = () => {
+        el.removeEventListener('pointermove', move);
+        el.removeEventListener('pointerup', up);
+      };
+      el.addEventListener('pointermove', move);
+      el.addEventListener('pointerup', up);
+    });
+  });
+}
+
+function updateTempoDisplay() {
+  document.getElementById('tempo-display').textContent = S.tempo;
+}
+
+// ============================================================
+// UI — STEP ŘADA
+// ============================================================
+
+const STEP_GROUP_COLORS = ['#d23a2a', '#e07820', '#d9b32a', '#efece1'];
+
+function buildStepRow() {
+  const row = document.getElementById('steps');
+  for (let i = 0; i < 16; i++) {
+    const b = document.createElement('button');
+    b.className = 'step';
+    b.innerHTML =
+      '<span class="led"></span>' +
+      '<span class="tag" style="--g:' + STEP_GROUP_COLORS[i >> 2] + '"></span>' +
+      '<span class="num">' + (i + 1) + '</span>';
+    b.addEventListener('pointerdown', () => {
+      initAudio();
+      S.pattern.kick[i] = !S.pattern.kick[i];
+      b.classList.toggle('active', S.pattern.kick[i]);
+    });
+    row.appendChild(b);
+  }
+}
+
+// ============================================================
+// TRANSPORT
+// ============================================================
+
+function initTransport() {
+  const led = document.getElementById('run-led');
+  // START/STOP zatím jen přepíná stav a LED — scheduler přijde v KOS-21
+  document.getElementById('btn-start').addEventListener('pointerdown', () => {
+    initAudio();
+    S.playing = true;
+    led.classList.add('on');
+  });
+  document.getElementById('btn-stop').addEventListener('pointerdown', () => {
+    S.playing = false;
+    led.classList.remove('on');
+  });
+
+  const trig = document.getElementById('kick-trig');
+  trig.addEventListener('pointerdown', () => {
+    initAudio();
+    playKick();
+  });
+}
+
+// ============================================================
+// BOOT
+// ============================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  buildStepRow();
+  initKnobs();
+  initTransport();
+  updateTempoDisplay();
+});
+</script>
+</body>
+</html>

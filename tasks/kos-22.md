@@ -1,6 +1,6 @@
 # KOS-22 — Zbytek bicí sady (snare, clap, hi-hats, tomy)
 
-**Status:** Todo
+**Status:** Done (v1.2, PR #3)
 
 ## Popis
 

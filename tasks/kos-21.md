@@ -1,6 +1,6 @@
 # KOS-21 — 16-step sequencer
 
-**Status:** Todo
+**Status:** Done (v1.1, PR #2)
 
 ## Popis
 

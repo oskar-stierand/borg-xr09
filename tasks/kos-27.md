@@ -11,10 +11,10 @@ Rozsah:
 - **Envelope tvary** — decay přes `setTargetAtTime` (vybíjení kondenzátoru) místo `exponentialRampToValueAtTime`; attack 1–3 ms místo nulového (odstranit digitální „cvak")
 - **Detuning hatů per úder** — šest obdélníků rozhodit o pár centů při každém úderu (pokaždé jiná interference, jako skutečný činel)
 - **Analog bus na masteru** — lowpass ~13 kHz + highpass ~30 Hz (analogová šířka pásma) + velmi jemná soft saturace mixu („výstupní stupeň")
-- **Revize glue kompresoru** (z KOS-25) — pomalejší attack ~10 ms (pustit transienty, stlačit těla), hlubší threshold + měkčí koleno (víc „slití"), release sladit s tempem ~120–200 ms, poslechově doladit s analog busem
+- **Paralelní komprese s knobem COMP** (nahrazuje sériový glue kompresor z KOS-25) — NY style: dry větev vždy 100 % (transienty netknuté), wet větev agresivně stlačená (threshold −24 dB, ratio 8:1, rychlý attack, release ~150 ms, fixní makeup gain); knob **COMP** v modulu Master přimíchává wet pod dry (0 = bez komprese, 1 = max glue). Parametr `compMix` v `DEFAULT_PARAMS` → jde do presetů i `captureState`/`applyState`; výchozí ~0.35, presetům nastavit vkusné hodnoty (boom bap víc, techno míň). Jediná UI změna tasku: 1 knob v Masteru.
 
 Technicky:
 - Drift jako malý helper (`drift(base, pct)`) volaný uvnitř `play*` funkcí
-- Master řetězec: master gain → LP → HP → soft shaper → kompresor → destination
-- Sequencer, UI ani parametry knobů se nemění
+- Master řetězec: master gain → LP → HP → soft shaper → [dry + comp→wet] → destination
+- Sequencer i zbytek UI beze změny; jediná UI změna = knob COMP v modulu Master
 - Po implementaci poslechový A/B test proti v1.6 (záloha ve `versions/`)

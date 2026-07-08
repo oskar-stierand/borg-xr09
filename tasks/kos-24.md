@@ -1,6 +1,6 @@
 # KOS-24 — Swing / shuffle
 
-**Status:** In Progress
+**Status:** Done (v1.4, PR #5)
 
 ## Popis
 

@@ -1,6 +1,6 @@
 # KOS-25 — Sound design: odplechovatění hlasů + master glue
 
-**Status:** In Progress
+**Status:** Done (v1.5, PR #6)
 
 ## Popis
 

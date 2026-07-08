@@ -1,6 +1,6 @@
 # KOS-23 — Accent, patterny a presety
 
-**Status:** Todo
+**Status:** Done (v1.3, PR #4)
 
 ## Popis
 

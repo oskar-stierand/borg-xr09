@@ -1,6 +1,6 @@
 # KOS-26 — Další factory presety
 
-**Status:** In Progress
+**Status:** Done (v1.6, PR #7)
 
 ## Popis
 

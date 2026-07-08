@@ -1,6 +1,6 @@
 # KOS-26 — Další factory presety
 
-**Status:** Todo
+**Status:** In Progress
 
 ## Popis
 
@@ -11,6 +11,7 @@ Kandidáti:
 - **Hip-hop (boom bap)** — ~90 BPM, výrazný swing, kick/snare houpání
 - **UK Garage / 2-step** — shuffle, vynechané kicky
 - **Reggaeton (dembow)** — kick 4/4 + snare na „a" dobách
+- **Liquid DnB** — ~172 BPM, two-step (kick 1 a 3&, snare 2 a 4), rolling ghost snares, jemný swing (styl Technimatic / Alix Perez)
 
 Technicky:
 - Jen data ve `FACTORY` + `<option>` v selectu — engine beze změny

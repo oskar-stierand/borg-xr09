@@ -11,6 +11,7 @@ Rozsah:
 - **Envelope tvary** — decay přes `setTargetAtTime` (vybíjení kondenzátoru) místo `exponentialRampToValueAtTime`; attack 1–3 ms místo nulového (odstranit digitální „cvak")
 - **Detuning hatů per úder** — šest obdélníků rozhodit o pár centů při každém úderu (pokaždé jiná interference, jako skutečný činel)
 - **Analog bus na masteru** — lowpass ~13 kHz + highpass ~30 Hz (analogová šířka pásma) + velmi jemná soft saturace mixu („výstupní stupeň")
+- **Revize glue kompresoru** (z KOS-25) — pomalejší attack ~10 ms (pustit transienty, stlačit těla), hlubší threshold + měkčí koleno (víc „slití"), release sladit s tempem ~120–200 ms, poslechově doladit s analog busem
 
 Technicky:
 - Drift jako malý helper (`drift(base, pct)`) volaný uvnitř `play*` funkcí

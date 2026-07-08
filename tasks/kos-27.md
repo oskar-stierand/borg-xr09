@@ -1,6 +1,6 @@
 # KOS-27 — Analog feel: humanizace hlasů + analog bus
 
-**Status:** In Progress (nejdřív body 4+5 — analog bus a paralelní komprese; body 1–3 humanizace následně)
+**Status:** In Progress (body 4+5 Done — v1.7, PR #8; body 1–3 humanizace v part 2)
 
 ## Popis
 

@@ -24,6 +24,7 @@ Před každou prací načti soubory se statusem `Todo` z `tasks/`.
 - **Syntax check** po každé změně: `node -e "new Function(js)"` na JS blok
 - **Záloha před změnou** — zkopíruj aktuální `index.html` do `versions/index-vX.html`
 - **Task update** — po dokončení tasku přepiš v `tasks/kos-XX.md` status na `Done (vX.Y, PR #N)`
+- **Changelog** — po dokončení tasku přidej záznam nové verze do `CHANGELOG.md`
 - **Vizuální změny nejdřív ukázat** — lokálně předvést, commit až po Oskarově schválení
 
 ### ❌ Nikdy
@@ -33,26 +34,32 @@ Před každou prací načti soubory se statusem `Todo` z `tasks/`.
 
 ---
 
-## Plánovaná struktura souboru `index.html`
+## Struktura souboru `index.html` (stav v1.8)
 
 ```
 <style>          ← veškerý CSS
 <body>           ← HTML struktura drum machine
 <script>
-  // CONSTANTS & STATE (S objekt — pattern, tempo, parametry nástrojů)
+  // CONSTANTS & STATE      S objekt (tempo, banky A–D, params), DEFAULT_PARAMS,
+  //                        registr INSTRUMENTS (8 hlasů — grid i sequencer se generují odsud)
   // AUDIO ENGINE
-  //   initAudio()
-  //   syntéza hlasů: playKick(), playSnare(), playClap(), playHat(), ...
-  // SEQUENCER
-  //   lookahead scheduler nad Web Audio clockem (ne setInterval)
-  //   16 kroků × řádky nástrojů, accent
-  // UI
-  //   step buttons, řádky nástrojů, knoby (tune/decay/level), tempo, play/stop
-  // PATTERNS / PRESETS (applyState / captureState)
-  // BOOT (DOMContentLoaded)
+  //   initAudio()          master → analog bus (HP/LP + saturace) + paralelní komprese (COMP)
+  //   drift()              per-hit humanizace (ladění, decay, hlasitost se úder od úderu liší)
+  //   hlasy: playKick(), playSnare(), playClap(), playHat() (closed/open + choke), playTom()
+  //          RC obálky (setTargetAtTime) místo digitálních ramp
+  // SEQUENCER              lookahead scheduler nad Web Audio clockem (ne setInterval),
+  //                        16 kroků, swing (offbeat 16tiny, 50–75 %), accent
+  // UI — KNOBS             KNOB_DEFS: tempo (40–240 BPM), masterVol, swing, compMix
+  //                        + tune/tone/snappy/decay/level per nástroj
+  // UI — SEQUENCER GRID    8 řádků nástrojů + řádek ACCENT, pattern banky A–D s kopírováním
+  // TRANSPORT              play/stop
+  // PATTERNY & PRESETY     captureState()/applyState(), makePreset(),
+  //                        9 factory presetů (house, breakbeat, jungle, electro, techno,
+  //                        boombap, ukgarage, dembow, liquiddnb)
+  // BOOT                   DOMContentLoaded
 ```
 
-Poznámka: struktura vznikne postupně podle tasků — tento nákres průběžně aktualizuj, aby odpovídal realitě.
+Poznámka: tento nákres průběžně aktualizuj, aby odpovídal realitě.
 
 ---
 

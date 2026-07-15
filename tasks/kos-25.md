@@ -1,18 +1,18 @@
-# KOS-25 — Sound design: odplechovatění hlasů + master glue
+# KOS-25 — Sound design: de-tinning the voices + master glue
 
 **Status:** Done (v1.5, PR #6)
 
-## Popis
+## Description
 
-Zvuk je moc „plechový" a sterilní. Čistě audio engine task (UI beze změny).
+The sound is too "tinny" and sterile. Pure audio engine task (UI unchanged).
 
-Rozsah:
-- **Hi-haty** — bandpass + highpass místo syrových obdélníků přes samotný highpass; rychlý „cink" attack envelope
-- **Kick** — waveshaper saturace (tanh) pro teplejší tělo, dvoufázový envelope (punch → sub tail)
-- **Snare** — krátký „crack" transient (rána paličky), dvoufázový snappy envelope, o chlup silnější tělo
-- **Master bus** — jemný DynamicsCompressor jako „glue" (threshold −12 dB, ratio 3:1)
+Scope:
+- **Hi-hats** — bandpass + highpass instead of raw squares through a single highpass; fast "ting" attack envelope
+- **Kick** — waveshaper saturation (tanh) for a warmer body, two-phase envelope (punch → sub tail)
+- **Snare** — short "crack" transient (stick hit), two-phase snappy envelope, slightly stronger body
+- **Master bus** — gentle DynamicsCompressor as "glue" (threshold −12 dB, ratio 3:1)
 
-Technicky:
-- Drive curve sdílená (vytvoří se jednou v `initAudio`), WaveShaper node per hlas
-- Řetězec: hlasy → master gain → kompresor → destination
-- Sequencer, UI ani parametry knobů se nemění
+Technical notes:
+- Shared drive curve (created once in `initAudio`), WaveShaper node per voice
+- Chain: voices → master gain → compressor → destination
+- Sequencer, UI, and knob params unchanged

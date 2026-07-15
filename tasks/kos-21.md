@@ -2,16 +2,16 @@
 
 **Status:** Done (v1.1, PR #2)
 
-## Popis
+## Description
 
-Srdce drum machine — krokový sekvencer nad Web Audio clockem.
+The heart of the drum machine — a step sequencer on top of the Web Audio clock.
 
-Rozsah:
-- 16 kroků × řádky nástrojů (zatím kick z KOS-20, připraveno na další hlasy)
-- Lookahead scheduler (audio clock + krátký setTimeout tick, ne setInterval na krok)
-- Play/Stop, tempo 40–240 BPM, vizuální běžící kurzor po krocích
-- Zapínání/vypínání kroků klikem, stav v `S.pattern`
+Scope:
+- 16 steps × instrument rows (just the kick from KOS-20 for now, prepared for more voices)
+- Lookahead scheduler (audio clock + a short setTimeout tick, not setInterval per step)
+- Play/Stop, tempo 40–240 BPM, visual running cursor across the steps
+- Toggle steps on/off by clicking, state kept in `S.pattern`
 
-Technicky:
-- Scheduler volá `play*()` funkce nástrojů s přesným `time` argumentem
-- Swing/shuffle zatím ne — samostatný task později
+Technical notes:
+- The scheduler calls the instruments' `play*()` functions with an exact `time` argument
+- No swing/shuffle yet — separate task later

@@ -2,6 +2,9 @@
 
 All notable changes to the project. Versions correspond to snapshots in `versions/index-vX.Y.html`.
 
+## v1.10 — 2026-07-15 (KOS-30, PR #11)
+- Finished the English translation: six Czech CSS section comments missed by KOS-28 (comments only, no behavior changes)
+
 ## v1.9 — 2026-07-15 (KOS-28, PR #10)
 - Translated the entire repository to English (README, CHANGELOG, CLAUDE.md, task files, code comments in `index.html`)
 - No behavior changes — `index.html` edits are comments only

@@ -2,18 +2,18 @@
 
 **Status:** Done (v1.4, PR #5)
 
-## Popis
+## Description
 
-Groove — posun sudých 16tinových kroků, aby beat „houpal" místo robotické přesnosti.
+Groove — shifting the even 16th steps so the beat "swings" instead of being robotically precise.
 
-Rozsah:
-- Knob **SWING** v modulu Tempo (vedle BPM)
-- Rozsah 50–75 % (0 = rovný beat, MPC-style maximum)
-- Posouvá liché indexy kroků (offbeat 16tiny) o `(swing−50 %) × 2 × délka kroku`
-- Vizuální kurzor zůstává synchronní se swingnutým audio časem
-- Swing je součást stavu (`DEFAULT_PARAMS` → presety, `captureState`/`applyState`)
-- Factory presetům nastavit vkusné výchozí hodnoty swingu
+Scope:
+- **SWING** knob in the Tempo module (next to BPM)
+- Range 50–75% (0 = straight beat, MPC-style maximum)
+- Shifts odd step indices (offbeat 16ths) by `(swing−50%) × 2 × step length`
+- The visual cursor stays in sync with the swung audio time
+- Swing is part of the state (`DEFAULT_PARAMS` → presets, `captureState`/`applyState`)
+- Give the factory presets tasteful default swing values
 
-Technicky:
-- Změna jen v `seqTick()`/`scheduleStep()` — offset se přičítá při plánování, grid `SEQ.nextTime` zůstává rovný
-- Audio engine (hlasy) beze změny
+Technical notes:
+- Change only in `seqTick()`/`scheduleStep()` — the offset is added when scheduling, the `SEQ.nextTime` grid stays straight
+- Audio engine (voices) unchanged

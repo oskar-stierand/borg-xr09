@@ -1,17 +1,17 @@
-# KOS-20 — Základní kostra: layout + audio init + kick
+# KOS-20 — Basic skeleton: layout + audio init + kick
 
 **Status:** Done (v1.0, PR #1)
 
-## Popis
+## Description
 
-První verze `index.html` — kostra celé drum machine, na které bude stát všechno další.
+First version of `index.html` — the skeleton of the whole drum machine that everything else will build on.
 
-Rozsah:
-- HTML/CSS layout ve stylu 909: horní panel s knoby, spodní řada 16 step tlačítek, sekce Play/Stop + tempo
-- `initAudio()` — Web Audio context, master gain (odemknutí contextu na první interakci)
-- První syntetizovaný hlas: **kick** (`playKick()`) — sinus s pitch envelope + click transient, knoby TUNE / DECAY / LEVEL
-- Tlačítko pro manuální trigger kicku (ověření zvuku ještě před sequencerem)
+Scope:
+- HTML/CSS layout in 909 style: top panel with knobs, bottom row of 16 step buttons, Play/Stop + tempo section
+- `initAudio()` — Web Audio context, master gain (unlock the context on first interaction)
+- First synthesized voice: **kick** (`playKick()`) — sine with a pitch envelope + click transient, TUNE / DECAY / LEVEL knobs
+- Manual kick trigger button (to verify the sound before the sequencer exists)
 
-Technicky:
-- Vše v jednom `index.html`, žádné závislosti
-- Stavový objekt `S` (tempo, parametry nástrojů) připravit tak, aby šel později rozšířit o pattern a další hlasy
+Technical notes:
+- Everything in a single `index.html`, no dependencies
+- Design the state object `S` (tempo, instrument params) so it can later be extended with a pattern and more voices

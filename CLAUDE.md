@@ -1,98 +1,98 @@
-# CLAUDE.md — Instrukce pro Claude Code
+# CLAUDE.md — Instructions for Claude Code
 
-Tento soubor popisuje jak pracovat s projektem BORG XR-09. Přečti ho vždy před jakoukoliv změnou kódu.
-
----
-
-## Projekt
-
-**BORG XR-09** je single-file webová drum machine („Rhythm Composer") v `index.html`, inspirovaná Rolandem TR-909 a podobnými nástroji. Žádný build, žádné závislosti, žádný Node.js — vše je v jednom souboru.
-
-Všechny zvuky jsou **syntetizované ve Web Audio API** (žádné samply, žádné externí soubory) — kick, snare, clap, hi-hats, tomy atd. vznikají z oscilátorů a šumu, stejně jako v analogové/hybridní 909.
-
-**Důležité:** Tento projekt je zcela samostatný. Nesahej na sesterský projekt `borg-xs20` (jiná složka, jiné repo) — slouží nanejvýš jako inspirace pro konvence.
-
-Tasky jsou vedeny ve složce **`tasks/`** — jeden soubor na task, pojmenovaný `kos-{číslo}.md` (např. `tasks/kos-20.md`). Číslování začíná na **kos-20** (kos-1 až kos-18 patří projektu XS-20; formát je Linear-importovatelný a Oskar tasky později hromadně nahraje — strukturu neměnit).
-Před každou prací načti soubory se statusem `Todo` z `tasks/`.
+This file describes how to work on the BORG XR-09 project. Always read it before making any code change.
 
 ---
 
-## Zásady práce s kódem
+## Project
 
-### ✅ Vždy
-- **Chirurgické změny** — měň jen to co je v tasku. Jeden task = jedna izolovaná změna.
-- **Syntax check** po každé změně: `node -e "new Function(js)"` na JS blok
-- **Záloha před změnou** — zkopíruj aktuální `index.html` do `versions/index-vX.html`
-- **Task update** — po dokončení tasku přepiš v `tasks/kos-XX.md` status na `Done (vX.Y, PR #N)`
-- **Changelog** — po dokončení tasku přidej záznam nové verze do `CHANGELOG.md`
-- **Vizuální změny nejdřív ukázat** — lokálně předvést, commit až po Oskarově schválení
+**BORG XR-09** is a single-file web drum machine ("Rhythm Composer") in `index.html`, inspired by the Roland TR-909 and similar instruments. No build, no dependencies, no Node.js — everything lives in one file.
 
-### ❌ Nikdy
-- Nespouštěj více vizuálních přepisů najednou
-- Neměň audio engine a UI zároveň
-- Nepřepisuj celé funkce pokud stačí opravit 2–3 řádky
+All sounds are **synthesized with the Web Audio API** (no samples, no external files) — kick, snare, clap, hi-hats, toms etc. are built from oscillators and noise, just like in an analog/hybrid 909.
+
+**Important:** This project is fully standalone. Do not touch the sister project `borg-xs20` (different folder, different repo) — at most it serves as inspiration for conventions.
+
+Tasks are tracked in the **`tasks/`** folder — one file per task, named `kos-{number}.md` (e.g. `tasks/kos-20.md`). Numbering starts at **kos-20** (kos-1 through kos-18 belong to the XS-20 project; the format is Linear-importable and Oskar will bulk-upload the tasks later — do not change the structure).
+Before starting any work, read the files with status `Todo` in `tasks/`.
 
 ---
 
-## Struktura souboru `index.html` (stav v1.8)
+## Working rules
+
+### ✅ Always
+- **Surgical changes** — only change what the task asks for. One task = one isolated change.
+- **Syntax check** after every change: `node -e "new Function(js)"` on the JS block
+- **Backup before changing** — copy the current `index.html` to `versions/index-vX.html`
+- **Task update** — after finishing a task, set the status in `tasks/kos-XX.md` to `Done (vX.Y, PR #N)`
+- **Changelog** — after finishing a task, add an entry for the new version to `CHANGELOG.md`
+- **Show visual changes first** — demo locally, commit only after Oskar approves
+
+### ❌ Never
+- Don't run multiple visual rewrites at once
+- Don't change the audio engine and the UI at the same time
+- Don't rewrite whole functions when fixing 2–3 lines is enough
+
+---
+
+## Structure of `index.html` (as of v1.8)
 
 ```
-<style>          ← veškerý CSS
-<body>           ← HTML struktura drum machine
+<style>          ← all CSS
+<body>           ← drum machine HTML structure
 <script>
-  // CONSTANTS & STATE      S objekt (tempo, banky A–D, params), DEFAULT_PARAMS,
-  //                        registr INSTRUMENTS (8 hlasů — grid i sequencer se generují odsud)
+  // CONSTANTS & STATE      S object (tempo, banks A–D, params), DEFAULT_PARAMS,
+  //                        INSTRUMENTS registry (8 voices — grid and sequencer are generated from it)
   // AUDIO ENGINE
-  //   initAudio()          master → analog bus (HP/LP + saturace) + paralelní komprese (COMP)
-  //   drift()              per-hit humanizace (ladění, decay, hlasitost se úder od úderu liší)
-  //   hlasy: playKick(), playSnare(), playClap(), playHat() (closed/open + choke), playTom()
-  //          RC obálky (setTargetAtTime) místo digitálních ramp
-  // SEQUENCER              lookahead scheduler nad Web Audio clockem (ne setInterval),
-  //                        16 kroků, swing (offbeat 16tiny, 50–75 %), accent
+  //   initAudio()          master → analog bus (HP/LP + saturation) + parallel compression (COMP)
+  //   drift()              per-hit humanization (tuning, decay, level vary hit to hit)
+  //   voices: playKick(), playSnare(), playClap(), playHat() (closed/open + choke), playTom()
+  //           RC envelopes (setTargetAtTime) instead of digital ramps
+  // SEQUENCER              lookahead scheduler on top of the Web Audio clock (not setInterval),
+  //                        16 steps, swing (offbeat 16ths, 50–75%), accent
   // UI — KNOBS             KNOB_DEFS: tempo (40–240 BPM), masterVol, swing, compMix
-  //                        + tune/tone/snappy/decay/level per nástroj
-  // UI — SEQUENCER GRID    8 řádků nástrojů + řádek ACCENT, pattern banky A–D s kopírováním
+  //                        + tune/tone/snappy/decay/level per instrument
+  // UI — SEQUENCER GRID    8 instrument rows + ACCENT row, pattern banks A–D with copy
   // TRANSPORT              play/stop
-  // PATTERNY & PRESETY     captureState()/applyState(), makePreset(),
-  //                        9 factory presetů (house, breakbeat, jungle, electro, techno,
+  // PATTERNS & PRESETS     captureState()/applyState(), makePreset(),
+  //                        9 factory presets (house, breakbeat, jungle, electro, techno,
   //                        boombap, ukgarage, dembow, liquiddnb)
   // BOOT                   DOMContentLoaded
 ```
 
-Poznámka: tento nákres průběžně aktualizuj, aby odpovídal realitě.
+Note: keep this sketch up to date so it matches reality.
 
 ---
 
-## Testování
+## Testing
 
-Žádné automatické testy. Manuální checklist po každé změně:
+No automated tests. Manual checklist after every change:
 
-- [ ] JS syntax check projde bez chyb
-- [ ] Drum machine se načte v Chrome bez console errors
-- [ ] Play/Stop funguje, sequencer běží v tempu bez driftu
-- [ ] Kroky jdou zapínat/vypínat a hrají správné nástroje
-- [ ] Patterny/presety se správně načítají (applyState)
-- [ ] Zvuk hraje bez artefaktů (kliky, praskání)
+- [ ] JS syntax check passes without errors
+- [ ] The drum machine loads in Chrome without console errors
+- [ ] Play/Stop works, the sequencer runs in tempo without drift
+- [ ] Steps can be toggled on/off and trigger the right instruments
+- [ ] Patterns/presets load correctly (applyState)
+- [ ] Sound plays without artifacts (clicks, crackling)
 
 ---
 
 ## Git workflow
 
 ```bash
-# Před každým taskem
-git checkout -b kos-XX-kratky-popis
+# Before each task
+git checkout -b kos-XX-short-slug
 
-# Po dokončení
+# When done
 git add index.html
-git commit -m "KOS-XX: stručný popis co bylo změněno"
-git push origin kos-XX-kratky-popis
-# → otevřít Pull Request na GitHubu (gh pr create)
+git commit -m "KOS-XX: short description of what changed"
+git push origin kos-XX-short-slug
+# → open a Pull Request on GitHub (gh pr create)
 ```
 
-Branch naming: `kos-{číslo}-{slug}` (stejný formát jako Linear `gitBranchName`).
+Branch naming: `kos-{number}-{slug}` (same format as Linear `gitBranchName`).
 
 ---
 
-## Komunikace
+## Language & communication
 
-Projekt je vyvíjen česky. Commit messages jsou anglicky (konvence).
+Conversation with Oskar happens **in Czech**. Everything in the repository is **in English**: code comments, docs (README, CHANGELOG), task files in `tasks/`, commit messages, and PR descriptions.

@@ -1,16 +1,16 @@
-# KOS-23 — Accent, patterny a presety
+# KOS-23 — Accent, patterns and presets
 
 **Status:** Done (v1.3, PR #4)
 
-## Popis
+## Description
 
-Z „hračky" udělat nástroj — dynamika a ukládání.
+Turn the "toy" into an instrument — dynamics and saving.
 
-Rozsah:
-- **Accent** řádek — akcentovaný krok zvýší velocity všech nástrojů na daném kroku (jako na 909)
-- Přepínání patternů (A/B/C/D), kopírování patternu
-- `captureState()` / `applyState()` — uložení a načtení celého stavu (pattern + parametry nástrojů + tempo)
-- Pár factory presetů (klasický 4-on-the-floor, breakbeat, electro)
+Scope:
+- **Accent** row — an accented step raises the velocity of all instruments on that step (like on the 909)
+- Pattern switching (A/B/C/D), pattern copy
+- `captureState()` / `applyState()` — save and load the entire state (pattern + instrument params + tempo)
+- A few factory presets (classic 4-on-the-floor, breakbeat, electro)
 
-Technicky:
-- Formát presetů jako prostý JS objekt, kompatibilní do budoucna s export/import JSON
+Technical notes:
+- Preset format as a plain JS object, forward-compatible with JSON export/import

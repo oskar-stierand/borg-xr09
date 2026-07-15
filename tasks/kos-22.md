@@ -1,18 +1,18 @@
-# KOS-22 — Zbytek bicí sady (snare, clap, hi-hats, tomy)
+# KOS-22 — Rest of the drum kit (snare, clap, hi-hats, toms)
 
 **Status:** Done (v1.2, PR #3)
 
-## Popis
+## Description
 
-Doplnit syntetizované hlasy do plné 909 sady.
+Add the remaining synthesized voices to complete the 909 kit.
 
-Rozsah:
-- **Snare** — tón (dva rozladěné oscilátory) + noise burst, knoby TUNE / TONE / SNAPPY / DECAY / LEVEL
-- **Clap** — filtrovaný šum s vícenásobným retrigger envelope (typický 909 „flam")
-- **Closed / Open hi-hat** — filtrovaný šum/metalický mix, open hat ukončí closed (choke group)
-- **Low / Mid / High tom** — laděný sinus s pitch envelope
-- Každý hlas: vlastní řádek v sequenceru + knoby
+Scope:
+- **Snare** — tone (two detuned oscillators) + noise burst, TUNE / TONE / SNAPPY / DECAY / LEVEL knobs
+- **Clap** — filtered noise with a multiple-retrigger envelope (the typical 909 "flam")
+- **Closed / Open hi-hat** — filtered noise/metallic mix, closed hat chokes the open hat (choke group)
+- **Low / Mid / High tom** — tuned sine with a pitch envelope
+- Each voice: its own sequencer row + knobs
 
-Technicky:
-- Žádné samply — vše z oscilátorů a šumového bufferu
-- Neměnit scheduler z KOS-21, jen registrovat nové hlasy
+Technical notes:
+- No samples — everything from oscillators and a noise buffer
+- Don't change the KOS-21 scheduler, just register the new voices

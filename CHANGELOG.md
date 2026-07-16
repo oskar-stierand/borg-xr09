@@ -2,6 +2,10 @@
 
 All notable changes to the project. Versions correspond to snapshots in `versions/index-vX.Y.html`.
 
+## v1.11 — 2026-07-16 (KOS-32, PR #12)
+- README hero screenshot under the title: the jungle (amen break) factory preset
+- Fixed a Czech UI label missed by the translation — the grid header `click a track name to trigger` (the diacritics were HTML-entity-encoded `&aacute;`, so the earlier raw-diacritic scan didn't catch it)
+
 ## v1.10 — 2026-07-15 (KOS-30, PR #11)
 - Finished the English translation: six Czech CSS section comments missed by KOS-28 (comments only, no behavior changes)
 

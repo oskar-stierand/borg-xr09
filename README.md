@@ -1,5 +1,7 @@
 # BORG XR-09 — Rhythm Composer
 
+![BORG XR-09 — the jungle (amen break) factory preset](docs/screenshots/borg-xr09.png)
+
 A simple yet legendary web drum machine inspired by the Roland TR-909.
 
 - **Single-file** — the whole instrument lives in `index.html`, no build, no dependencies
